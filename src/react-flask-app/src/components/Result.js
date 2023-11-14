@@ -1,68 +1,127 @@
 import React, { useState, useRef } from 'react';
 import { Card, Col, Container, Row, Button } from 'react-bootstrap';
-import Image from '../img/no_image.jpg';
+import NoImage from '../img/no_image.jpg';
+import LoadingGif from '../img/loading.gif'
+import './loading.css';
 
 function Result() {
-  const [images, setImages] = useState(Array(12).fill(Image));
+  const [images, setImages] = useState(Array(12).fill(null));
   const fileInputRef = useRef(null);
+  const elapsedTimeRef = useRef(0);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  const handleUploadDataset = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (event) => {
-    const fileInput = event.target;
-    const uploadedImages = [];
-  
-    if (fileInput.files && fileInput.files.length > 0) {
-      for (let i = 0; i < Math.min(fileInput.files.length); i++) {
-        const file = fileInput.files[i];
-        const imageUrl = URL.createObjectURL(file);
-        uploadedImages.push(imageUrl);
-      }
-    }
-  
-    // Send the array of images to the Flask backend
-    fetch('http://localhost:5000/api/uploaddataset', {
-      method: 'POST',
-      body: JSON.stringify({ images: uploadedImages }), // Send the array of images as JSON
-      headers: {
-        'Content-Type': 'application/json',
-      },
+  //Handler ketika tombol search diklik
+  const handleSearch = () => {
+    setLoading(true);
+    const startTime = performance.now(); 
+    fetch('http://localhost:5000/api/imagerecognition', {
+      method: 'GET',
     })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response from Flask
-        console.log('Response from Flask:', data);
-  
-        // Update the images in the state with the response from Flask
-        if (data.images) {
-          setImages(data.images);
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Failed to fetch dataset');
         }
       })
+      .then((data) => {
+        const endTime = performance.now(); 
+        elapsedTimeRef.current = (endTime - startTime) / 1000;
+        console.log('Time taken for image recognition (s):', elapsedTimeRef.current);
+        
+        console.log('Response:', data);
+        setImages(data.similar_images || []);
+      })
       .catch((error) => {
-        // Handle errors if any
-        console.error('Error:', error);
+        alert("Anda belum memasukkan file atau dataset");
+        console.error('Error during dataset fetch:', error);
+      })
+      .finally(() => {
+        setLoading(false); 
       });
   };
-  
+
+  const handleUploadDataset = () => {
+    // Trigger handleFileChange 
+    handleFileChange();
+  };
+
+  // Handler untuk mendapatkan dataset
+  const handleFileChange = () => {
+    fetch('http://localhost:5000/api/uploaddataset', {
+      method: 'GET',
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Failed to fetch dataset');
+        }
+      })
+      .then((data) => {
+        console.log(data);
+        setImages(data.images || []);
+      })
+      .catch((error) => {
+        console.error('Error during dataset fetch:', error);
+      });
+  };
 
   // Menghitung batas bawah dan atas gambar yang akan ditampilkan berdasarkan halaman
   const itemsPerPage = 12;
   const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage; // Mengganti images.length
+  const endIndex = startIndex + itemsPerPage;
   const displayedImages = images.slice(startIndex, endIndex);
 
   return (
     <Container>
+      <Row>
+        <Col>
+          <Button variant="primary" onClick={handleSearch} className="mt-3">
+            Search
+          </Button>
+          {loading && (
+            <div className="loading-container">
+              <img src={LoadingGif} alt="Loading" className="loading-gif" />
+            </div>
+          )}
+        </Col>
+      </Row>
+      {elapsedTimeRef.current ? (
+        <Row>
+          <Col>
+            <p>Total Result: {images.length}</p>
+          </Col>
+          <Col>
+            <p>Time Taken : {elapsedTimeRef.current} s</p>
+          </Col>
+        </Row>
+      ) : (
+        <Row>
+          <Col>
+            <p>You haven't performed a data search yet</p>
+          </Col>
+        </Row>
+      )}
       <Row className="mb-3">
         {displayedImages.map((image, index) => (
           <Col sm={3} key={index}>
             <Card style={{ width: '300px' }}>
-              <Card.Img src={image} alt={`Image ${index + 1}`} className="img-fluid" />
+              {image ? (
+                <>
+                  <Card.Img src={`http://localhost:5000/api/images/${image.image_url}`} alt={`Image ${index + 1}`} className="img-fluid" />
+                  {image.similarity && (
+                    <Card.Body>
+                      <Card.Title>Similarity: {image.similarity} %</Card.Title>
+                    </Card.Body>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Card.Img src = {NoImage}/>
+                </>
+              )}
             </Card>
           </Col>
         ))}
@@ -71,9 +130,6 @@ function Result() {
         <Col className="d-flex justify-content-start">
           <div>
             <input
-              type="file"
-              accept="image/*"
-              id="image-upload"
               ref={fileInputRef}
               style={{ display: 'none' }}
               multiple
@@ -108,3 +164,4 @@ function Result() {
 }
 
 export default Result;
+

@@ -10,6 +10,7 @@ function Navbars() {
           <Navbar.Brand href="/">Xandey</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="image-retrieval">Image Retrieval</Nav.Link>
             <Nav.Link href="how-to-use">How To Use</Nav.Link>
             <Nav.Link href="about">About Us</Nav.Link>
           </Nav>
