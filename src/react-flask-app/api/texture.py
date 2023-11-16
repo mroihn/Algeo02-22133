@@ -55,6 +55,13 @@ def texture_based_image_retrieval(query_image, database_images, nama_file, imdir
             i+=1
             # print("cosine similarity:")
             # print(consineSimilarity(acuan_vector, vectorize))
+    for i in range(1, len(result)):
+        key = result[i]
+        j = i - 1
+        while j >= 0 and result[j]['similarity'] < key['similarity']:
+            result[j + 1] = result[j]
+            j -= 1
+        result[j + 1] = key
     return result
 
 
