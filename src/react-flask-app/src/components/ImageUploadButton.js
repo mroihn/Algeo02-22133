@@ -3,6 +3,8 @@ import { Card, Button, Col, Row, Container } from 'react-bootstrap';
 import NoImage from '../img/no_image.jpg';
 import Webcam from 'react-webcam';
 
+export let imageQuery 
+
 function ImageUploadButton() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState('');
@@ -54,6 +56,7 @@ function ImageUploadButton() {
       .then((data) => {
         setSelectedImage(data.image.image_url);
         setSelectedFileName(data.image.image_name);
+        imageQuery = data.image.image_name;
         console.log(data);
       })
       .catch((error) => {
@@ -95,6 +98,7 @@ function ImageUploadButton() {
       .then((data) => {
         setSelectedImage(data.image.image_url);
         setSelectedFileName(data.image.image_name);
+        imageQuery = data.image.image_name;
         console.log(data);
       })
       .catch((error) => {
@@ -203,5 +207,3 @@ function ImageUploadButton() {
 }
 
 export default ImageUploadButton;
-
-

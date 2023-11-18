@@ -19,7 +19,8 @@ function HTUContainer() {
           <h2>Step 2: Upload Dataset</h2>
           <p>
             Kumpulan gambar (dataset), dilakukan dengan cara mengunggah multiple image 
-            dalam bentuk folder ke dalam web browser.
+            dalam bentuk folder ke dalam web browser. Anda juga bisa mengambil dataset 
+            dari website lain menggunakan tombol image scraping.
           </p>
         </div>
       </div>

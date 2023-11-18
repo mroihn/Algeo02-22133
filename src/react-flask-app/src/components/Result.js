@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { Card, Col, Container, Row, Button, Form } from 'react-bootstrap';
+import { Card, Col, Container, Row, Button, Form , Alert} from 'react-bootstrap';
 import NoImage from '../img/no_image.jpg';
-import LoadingGif from '../img/loading.gif'
+import LoadingGif from '../img/loading.gif';
 import './loading.css';
+import jsPDF from 'jspdf';
+import {imageQuery} from './ImageUploadButton';
 
 function Result() {
   const [images, setImages] = useState(Array(12).fill(null));
@@ -11,6 +13,7 @@ function Result() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [scrap, setScrap] = useState(false);
+  const [alert, setAlert] = useState(false);
   const [websiteUrl, setWebsiteUrl] = useState('');
 
   //Handler ketika tombol search diklik
@@ -36,7 +39,7 @@ function Result() {
         setImages(data.similar_images || []);
       })
       .catch((error) => {
-        alert("Anda belum memasukkan file atau dataset");
+        setAlert(true);
         console.error('Error during dataset fetch:', error);
       })
       .finally(() => {
@@ -112,6 +115,47 @@ function Result() {
 
   };
 
+  const handlePDF = () => {
+    if (images.length === 0) {
+      setAlert(true);
+      return;
+    }
+
+    setLoading(true); 
+
+    setTimeout(() => {
+      const pdf = new jsPDF();
+      const imagesPerPage = 12;
+
+      pdf.text('Image Query', 20, 20);
+      pdf.addImage(`http://localhost:5000/api/image/${imageQuery}`, 'JPEG', 20, 70, 80, 90);
+      pdf.addPage();
+
+      images.forEach((image, index) => {
+        const page = Math.floor(index / imagesPerPage);
+        const position = index % imagesPerPage;
+
+        // Start a new page for every 12 images
+        if (position === 0 && index !== 0) {
+          pdf.addPage();
+        }
+
+        const x = 10 + (position % 3) * 60;
+        const y = 10 + Math.floor(position / 3) * 70 + page ;
+
+        pdf.addImage(`http://localhost:5000/api/images/${image.image_url}`, 'JPEG', x, y, 50, 60);
+
+        if (image.similarity) {
+          pdf.text(`Similarity: ${image.similarity}%`, x, y + 67.5);
+        }
+      });
+
+      pdf.save('generated_pdf');
+      
+      setLoading(false); 
+    }, 2000); 
+  };
+
   // Menghitung batas bawah dan atas gambar yang akan ditampilkan berdasarkan halaman
   const itemsPerPage = 12;
   const startIndex = (page - 1) * itemsPerPage;
@@ -120,8 +164,16 @@ function Result() {
 
   return (
     <Container>
+      {alert && (
+        <Alert variant="danger" onClose={() => setAlert(false)} dismissible>
+        <Alert.Heading>You got an error!</Alert.Heading>
+        <p>
+          Anda belum memasukan dataset atau image query
+        </p>
+      </Alert>
+      )}
       <Row>
-        <Col>
+        <Col className="d-flex justify-content-start">
           <Button variant="primary" onClick={handleSearch} className="mt-3">
             Search
           </Button>
@@ -130,6 +182,11 @@ function Result() {
               <img src={LoadingGif} alt="Loading" className="loading-gif" />
             </div>
           )}
+        </Col>
+        <Col className="d-flex justify-content-end">
+          <Button variant="primary" onClick={handlePDF} className="mt-3">
+            Export
+          </Button>
         </Col>
       </Row>
       {elapsedTimeRef.current ? (
