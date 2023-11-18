@@ -6,34 +6,29 @@ function HTUContainer() {
       </header>
       <div className="row">
         <div className="col-md-6">
-          <h2>Step 1: Clone Github Repository</h2>
+          <h2>Step 1: Upload Image Query</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-            do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris nisi ut aliquip ex ea commodo consequat.
+            Image query berisi gambar yang akan digunakan dalam pencarian gambar. 
+            Untuk memasukkan image query, Anda dapat menggunakan tombol 'Insert Image' 
+            atau menggunakan tombol 'Capture Image'.
           </p>
         </div>
       </div>
       <div className="row mt-5">
         <div className="col-md-6">
-          <h2>Step 2: Jalankan React App</h2>
+          <h2>Step 2: Upload Dataset</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-            do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris nisi ut aliquip ex ea commodo consequat.
+            Kumpulan gambar (dataset), dilakukan dengan cara mengunggah multiple image 
+            dalam bentuk folder ke dalam web browser.
           </p>
         </div>
       </div>
       <div className="row mt-5">
         <div className="col-md-6">
-          <h2>Step 3: Jalankan API</h2>
+          <h2>Step 3: Click Search Button</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-            do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris nisi ut aliquip ex ea commodo consequat.
+            Setelah memasukkan image query, kumpulan gambar inilah yang akan diseleksi 
+            menjadi result.
           </p>
         </div>
       </div>

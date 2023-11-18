@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Container } from 'react-bootstrap';
 
 // Import background image
-import backgroundImage from '../img/bg.jpg';
+import backgroundImage from '../img/space.gif';
 
 function LPContainer() {
   const handleButtonClick = () => {

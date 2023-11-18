@@ -2,18 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from 'react-bootstrap';
-import NoImage from '../img/no_image.jpg';
+import Image from '../img/Foto_kelompok.jpg';
 
 function AboutContainer() {
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 mb-5">
       <header className="text-center mb-5">
         <h1>About Us</h1>
       </header>
       <div className="row">
         <div className="col-md-6">
           <img
-            src={NoImage}
+            src={Image}
             alt="Team"
             className="img-fluid rounded"
           />
@@ -21,10 +21,8 @@ function AboutContainer() {
         <div className="col-md-6">
           <h2>Our Story</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-            do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris nisi ut aliquip ex ea commodo consequat.
+            Web ini merupakan hasil dari kerja keras dalam menyelesaikan 
+            tugas Aljabar Linear dan Geometri.
           </p>
           <Button variant="primary" as={Link} to="https://github.com/mroihn/Algeo02-22133">
             Visit GitHub

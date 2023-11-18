@@ -11,7 +11,6 @@ function Home() {
     <Navbars/>
       <Header/>
       <ImageUploadButton/>
-      <div className="my-4"></div>
       <Result/>
    </div>
   );
