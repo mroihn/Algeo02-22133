@@ -1,6 +1,6 @@
 function HTUContainer() {
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 mb-5">
       <header className="text-center mb-5">
         <h1>How to Use</h1>
       </header>
@@ -30,6 +30,14 @@ function HTUContainer() {
           <p>
             Setelah memasukkan image query, kumpulan gambar inilah yang akan diseleksi 
             menjadi result.
+          </p>
+        </div>
+      </div>
+      <div className="row mt-5">
+        <div className="col-md-6">
+          <h2>Step 4: Export </h2>
+          <p>
+            Hasil luaran program yang dapat diunduh ke local storage dalam format PDF.
           </p>
         </div>
       </div>

@@ -22,6 +22,7 @@ function Navbars() {
             <Nav.Link href="image-retrieval">Image Retrieval</Nav.Link>
             <Nav.Link href="how-to-use">How To Use</Nav.Link>
             <Nav.Link href="about">About Us</Nav.Link>
+            <Nav.Link href="concept">Concept</Nav.Link>
           </Nav>
         </Container>
       </Navbar>

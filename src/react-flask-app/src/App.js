@@ -4,6 +4,7 @@ import Home from './components/Home';
 import About from './components/About';
 import HowToUse from './components/HowToUse';
 import LandingPage from './components/LandingPage';
+import Concept from './components/Concept';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/how-to-use" element={<HowToUse />} />
           <Route path="/image-retrieval" element={<Home />} />
+          <Route path="/concept" element={<Concept />} />
         </Routes>
     </Router>
   );
