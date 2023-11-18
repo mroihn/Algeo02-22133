@@ -17,40 +17,40 @@ def bgr2hsv(image):
     for i in prange(image.shape[0]):
         for j in prange(image.shape[1]):
             if delta[i, j] != 0:
+                # untuk hue/hsv[...,0] rangenya 0-180 karena cv.calcHis hanya bisa baca 8 bits (maks 255)
                 if cmax[i, j] == r[i, j]:
                     hsv_image[i, j, 0] = 30 * (((g[i, j] - b[i, j]) / delta[i, j]) % 1)
                 elif cmax[i, j] == g[i, j]:
                     hsv_image[i, j, 0] = 30 * (2.0 + (((b[i, j] - r[i, j]) / delta[i, j]) % 1))
                 else:
                     hsv_image[i, j, 0] = 30 * (4.0 + (((r[i, j] - g[i, j]) / delta[i, j]) % 1))
-                # untuk hue/hsv[...,0] rangenya 0-180 karena cv.calcHis hanya bisa baca 8 bits (maks 255)
-                hsv_image[i, j, 1] = np.round((100 * (cmax[i, j] - cmin[i, j]) / cmax[i, j] ))
 
+                # saturation
+                hsv_image[i, j, 1] = np.round((100 * (cmax[i, j] - cmin[i, j]) / cmax[i, j] ))
+            # value
             hsv_image[i, j, 2] = np.round(((100 * cmax[i, j]) / 255))
 
     return hsv_image
 
 def block_histograms(hsv_image):
-    # Get the dimensions of the image
     height, width = hsv_image.shape[:2]
 
-    # Determine the dimensions of each block (assuming equally sized blocks)
+    # Mendapat dimensi block, mungkin kehilangan 1-3 piksel ujung
     block_height = height // 4
     block_width = width // 4
 
     block_histograms = []
 
-    # Iterate through each block
     for i in prange(4):
         for j in prange(4):
-            # Define the boundaries of the current block
+            # Definisi indeks block saat ini
             y_start, y_end = i * block_height, (i + 1) * block_height
             x_start, x_end = j * block_width, (j + 1) * block_width
 
-            # Extract the block from the HSV image
+            # Mengambil data untuk block
             block = hsv_image[y_start:y_end, x_start:x_end]
 
-            # Calculate histogram for the block
+            # Menghitung histogram block
             hist = calcHis_hsv(block)
             cv.normalize(hist, hist).flatten()
             block_histograms.append(hist)
@@ -58,10 +58,10 @@ def block_histograms(hsv_image):
     return block_histograms
 
 def calcHis_hsv(hsv_block):
-    # Process HSV image using Numba-optimized function
+    # memisahkan setiap channels
     h_unnormalized, s_unnormalized, v_unnormalized = hsv_block[...,0], hsv_block[...,1], hsv_block[...,2]
     
-    # Calculate histograms for each channel
+    # menghitung histogram setiap channels
     hist_h = cv.calcHist([h_unnormalized], [0], None, [90], [0, 180]).flatten()
     hist_s = cv.calcHist([s_unnormalized], [0], None, [50], [0, 100]).flatten()
     hist_v = cv.calcHist([v_unnormalized], [0], None, [50], [0, 100]).flatten()
@@ -74,8 +74,6 @@ def color_similarity(block_hist1,block_hist2):
     for i in range(16):
         vector1 = block_hist1[i]
         vector2 = block_hist2[i]
-
-        # similarities.append(cosineSimilarity(vector1,vector2))
 
         dotproduct = np.dot(vector1,vector2)
 
