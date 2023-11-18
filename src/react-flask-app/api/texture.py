@@ -31,7 +31,7 @@ def toVec(normArray):
 def consineSimilarity(array1, array2):
     return (np.dot(array1, array2) / (np.sqrt(np.dot(array1,array1)) * (np.sqrt(np.dot(array2,array2)))))
 
-def texture_based_image_retrieval(query_image, database_images, nama_file, imdir):
+def texture_based(query_image, database_images, nama_file, imdir):
     imgs =[]
     #vec = []
    

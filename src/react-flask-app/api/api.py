@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os,cv2,glob
 from tkinter import Tk, filedialog
-from texture import texture_based_image_retrieval
+from texture import texture_based
+from color import color_based
 
 
 app = Flask(__name__)
@@ -150,13 +151,18 @@ def image_recognition_route():
     if not uploaded_image or not uploaded_dataset:
         return {'message': 'No image or dataset available for recognition'}, 400  
     if(search_mode == 'color'):      
-        return jsonify({'message': 'Image recognition complete', 'similar_images': uploaded_dataset, 'search_mode':search_mode})
+        acuan = cv2.imread(uploaded_image)
+        imdir = dataset_path.rstrip('/') + '/'
+        image_files = os.listdir(imdir)
+        arr_nama_file = [file for file in os.listdir(imdir) if os.path.isfile(os.path.join(imdir, file))]
+        result = color_based(acuan,image_files,arr_nama_file,imdir)
+        return jsonify({'message': 'Image recognition complete', 'similar_images': result, 'search_mode':search_mode})
     elif(search_mode == 'texture'):
         acuan = cv2.imread(uploaded_image)
         imdir = dataset_path.rstrip('/') + '/'
         image_files = os.listdir(imdir)
         arr_nama_file = [file for file in os.listdir(imdir) if os.path.isfile(os.path.join(imdir, file))]
-        result = texture_based_image_retrieval(acuan,image_files,arr_nama_file,imdir)
+        result = texture_based(acuan,image_files,arr_nama_file,imdir)
         return jsonify({'message': 'Image recognition complete', 'similar_images': result, 'search_mode':search_mode})
     else:
         return {'message': 'Error'}, 400  
