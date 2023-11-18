@@ -1,13 +1,16 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef,useCallback, useEffect } from 'react';
 import { Card, Button, Col, Row, Container } from 'react-bootstrap';
 import NoImage from '../img/no_image.jpg';
+import Webcam from 'react-webcam';
 
 function ImageUploadButton() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState('');
   const fileInputRef = useRef(null);
   const [isSearchMode, setSearchMode] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [cameraOn, setCameraOn] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(0);
+  const webcamRef = React.useRef(null);
 
   const handleToggle = () => {
     setSearchMode(!isSearchMode);
@@ -59,16 +62,34 @@ function ImageUploadButton() {
   };
 
   // Handler untuk ambil foto
-  const handleCaptureImage = () => {
-    setLoading(true); 
-    fetch('http://localhost:5000/api/capture_image', {
-      method: 'GET',
-    })
+  const handleCapture = useCallback(() => {
+    setCameraOn(true);
+    setRemainingTime(5);
+
+    const interval = setInterval(() => {
+      setRemainingTime((prevTime) => prevTime - 1);
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      const delayedImageSrc = webcamRef.current.getScreenshot();
+      setCameraOn(false);
+      setRemainingTime(0);
+
+      // Send the image to the Flask server
+      const formData = new FormData();
+      formData.append('file', dataURItoBlob(delayedImageSrc), 'captured_photo.jpg');
+
+      fetch('http://localhost:5000/api/camera', {
+        method: 'POST',
+        body: formData,
+      })
+
       .then((response) => {
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error('Failed to fetch image');
+          throw new Error('Failed to capture image');
         }
       })
       .then((data) => {
@@ -78,11 +99,30 @@ function ImageUploadButton() {
       })
       .catch((error) => {
         console.error('Error during image fetch:', error);
-      })
-      .finally(() => {
-        setLoading(false);
       });
-  };
+
+    }, 5000);
+  }, [webcamRef]);
+
+  useEffect(() => {
+    if (remainingTime > 0) {
+      const interval = setInterval(() => {
+        setRemainingTime((prevTime) => prevTime - 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [remainingTime]);
+
+  const dataURItoBlob = (dataURI) => {
+    const byteString = atob(dataURI.split(',')[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: 'image/jpeg' });
+  }
 
   return (
     <div className="container mt-4">
@@ -114,11 +154,10 @@ function ImageUploadButton() {
               </Row>
               <Row className="mt-3">
                 <label htmlFor="image-upload">
-                  <Button variant="info" onClick={handleCaptureImage}>
+                  <Button variant="info" onClick={handleCapture} disabled={cameraOn}>
                     Capture Image
                   </Button>
                 </label>
-                {loading && <span className="ml-2">Loading...</span>}
               </Row>
             </div>
           </Col>
@@ -148,6 +187,14 @@ function ImageUploadButton() {
               <p>{selectedFileName}</p>
             </div>
             )}
+            {cameraOn && (
+              <div>
+                <Card style={{ width: '250px' }}>
+                  <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
+                </Card>
+                <p>Remaining Time: {remainingTime} seconds</p>
+              </div>
+            )}
           </Col>
         </Row>
       </Container>
@@ -156,3 +203,5 @@ function ImageUploadButton() {
 }
 
 export default ImageUploadButton;
+
+

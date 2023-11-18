@@ -88,51 +88,40 @@ def upload_image():
     else:
         return jsonify({'message': 'Error selecting image'})
     
-@app.route('/api/capture_image', methods=['GET'])
-def captureImage():
- # Buka kamera
-    cap = cv2.VideoCapture(0)
-
-    if not cap.isOpened():
-        return {'message': 'Could not open camera'}, 400  
-
-    # Ambil frame dari kamera
-    ret, frame = cap.read()
-
-    if not ret:
-        return {'message': 'Failed to capture frame'}, 400  
-
-    # Tentukan path awal dari file
-    original_file_path = "../src/img/captured_photo.jpg"
-    global directory_path
-    directory_path = os.path.dirname(original_file_path)
-
-    # Pastikan folder "captured_image" sudah ada, jika tidak, buat folder tersebut
-    os.makedirs(directory_path, exist_ok=True)
-
-    # Jika file dengan nama tersebut sudah ada, ganti nama file
-    counter = 1
-    file_name = os.path.basename(original_file_path)
-    while os.path.exists(os.path.join(directory_path, file_name)):
-        file_name = f"captured_photo_{counter}.jpg"
-        counter += 1
-
-    # Buat path baru dengan nama file yang unik
+@app.route('/api/camera', methods=['POST'])
+def upload_file():
     
-    file_path = os.path.join(directory_path, file_name)
-    global uploaded_image
-    uploaded_image = file_path
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'})
 
-    # Simpan foto
-    cv2.imwrite(file_path, frame)
+    file = request.files['file']
 
-    # Tutup kamera
-    cap.release()
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'})
 
-    image_object = {'image_url': file_path, 'image_name': file_name}
-    
+    if file:
+        original_file_path = "../src/img/captured_photo.jpg"
+        global directory_path
+        directory_path = os.path.dirname(original_file_path)
 
-    return jsonify({'message': 'Image uploaded successfully', 'image': image_object})
+        # Pastikan folder "captured_image" sudah ada, jika tidak, buat folder tersebut
+        os.makedirs(directory_path, exist_ok=True)
+
+        # Jika file dengan nama tersebut sudah ada, ganti nama file
+        counter = 1
+        file_name = os.path.basename(original_file_path)
+        while os.path.exists(os.path.join(directory_path, file_name)):
+            file_name = f"captured_photo_{counter}.jpg"
+            counter += 1
+
+        # Buat path baru dengan nama file yang unik
+        
+        file_path = os.path.join(directory_path, file_name)
+        global uploaded_image
+        uploaded_image = file_path
+        file.save(os.path.join(directory_path, file_name))
+        image_object = {'image_url': file_path, 'image_name': file_name}
+        return jsonify({'message': 'Image uploaded successfully', 'image': image_object})
     
 
 # Rute untuk mengatur mode pencarian 
@@ -171,6 +160,8 @@ def image_recognition_route():
         return jsonify({'message': 'Image recognition complete', 'similar_images': result, 'search_mode':search_mode})
     else:
         return {'message': 'Error'}, 400  
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
