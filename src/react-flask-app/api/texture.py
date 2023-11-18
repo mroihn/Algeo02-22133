@@ -42,7 +42,7 @@ def texture_based(query_image, database_images, nama_file, imdir):
 
     i = 0
     for files in database_images:
-        if files.endswith('jpg'):
+        if files.endswith(('jpg','jpeg','png')):
             image_path = os.path.join(imdir, files)
             image = cv.imread(image_path)
             grayed = toGray(image)

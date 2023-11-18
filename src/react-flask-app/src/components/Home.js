@@ -7,7 +7,7 @@ import Navbars from './Navbar';
 
 function Home() {
   return (
-    <div className="justify-content-center">
+    <div className="justify-content-center mb-5">
     <Navbars/>
       <Header/>
       <ImageUploadButton/>

@@ -4,6 +4,9 @@ import os,cv2,glob
 from tkinter import Tk, filedialog
 from texture import texture_based
 from color import color_based
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
 
 
 app = Flask(__name__)
@@ -63,6 +66,8 @@ def upload_dataset():
         image_objects = get_image_objects_from_folder(dataset_path)
         global uploaded_dataset
         uploaded_dataset = image_objects
+        # print(dataset_path)
+        # print(uploaded_dataset)
 
         return jsonify({'message': 'Dataset uploaded successfully', 'images': image_objects})
     else:
@@ -88,7 +93,8 @@ def upload_image():
         return jsonify({'message': 'Image uploaded successfully', 'image': image_object})
     else:
         return jsonify({'message': 'Error selecting image'})
-    
+
+# Rute untuk mengambil gambar dari kamera    
 @app.route('/api/camera', methods=['POST'])
 def upload_file():
     
@@ -166,7 +172,59 @@ def image_recognition_route():
         return jsonify({'message': 'Image recognition complete', 'similar_images': result, 'search_mode':search_mode})
     else:
         return {'message': 'Error'}, 400  
-
+    
+# Rute untuk melakukan image scraping
+@app.route('/api/imagescraping', methods=['POST'])
+def image_scraping():
+    # Mendapatkan URL dari data POST
+    data = request.get_json()
+    url = data.get('url', '')
+    save_folder = '../src/scraped_img'
+    
+    # Memastikan URL yang valid
+    if not url:
+        return jsonify({'error': 'Invalid URL'}), 400
+    # Membuat folder jika belum ada
+    os.makedirs(save_folder, exist_ok=True)
+    global dataset_path
+    dataset_path = '../src/scraped_img'
+    
+    # Mengunduh halaman web
+    response = requests.get(url)
+    
+    # Memastikan permintaan berhasil
+    if response.status_code == 200:
+        # Menggunakan BeautifulSoup untuk parsing HTML
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        # Mencari tag <img> untuk mendapatkan gambar
+        img_tags = soup.find_all('img')
+        
+        for img_tag in img_tags:
+            # Mendapatkan URL gambar
+            img_url = img_tag.get('src')
+            
+            # Menggabungkan URL gambar dengan URL halaman web jika diperlukan
+            img_url = urljoin(url, img_url)
+            
+            # Memeriksa apakah URL gambar berakhir dengan .jpg, .jpeg, atau .png
+            if img_url.lower().endswith(('.jpg', '.jpeg', '.png')):
+                # Mendownload gambar
+                img_data = requests.get(img_url).content
+                
+                # Menyimpan gambar ke folder yang ditentukan
+                img_filename = f"image{img_tags.index(img_tag) + 1}.jpg"
+                img_path = os.path.join(save_folder, img_filename)
+                
+                with open(img_path, 'wb') as img_file:
+                    img_file.write(img_data)
+           
+        image_objects = get_image_objects_from_folder(dataset_path)
+        global uploaded_dataset
+        uploaded_dataset = image_objects
+        return jsonify({'message': 'Image scraping successfully', 'images': image_objects})
+    else:
+        return jsonify({'message': 'Error scraping image'})
 
 
 if __name__ == '__main__':
