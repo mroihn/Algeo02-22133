@@ -18,12 +18,16 @@ def bgr2hsv(image):
         for j in prange(image.shape[1]):
             if delta[i, j] != 0:
                 # untuk hue/hsv[...,0] rangenya 0-180 karena cv.calcHis hanya bisa baca 8 bits (maks 255)
+                # Jika merah dominan, range(150 - 30)
                 if cmax[i, j] == r[i, j]:
-                    hsv_image[i, j, 0] = 30 * (((g[i, j] - b[i, j]) / delta[i, j]) % 1)
+                    hsv_image[i, j, 0] = 30 * (((g[i, j] - b[i, j]) / delta[i, j]) % 6)
+                # Jika hijau dominan, range(30 - 90)
                 elif cmax[i, j] == g[i, j]:
-                    hsv_image[i, j, 0] = 30 * (2.0 + (((b[i, j] - r[i, j]) / delta[i, j]) % 1))
+                    hsv_image[i, j, 0] = 30 * (2.0 + ((b[i, j] - r[i, j]) / delta[i, j]))
+                # Jika biru dominan, range(90 - 150)
                 else:
-                    hsv_image[i, j, 0] = 30 * (4.0 + (((r[i, j] - g[i, j]) / delta[i, j]) % 1))
+                    hsv_image[i, j, 0] = 30 * (4.0 + ((r[i, j] - g[i, j]) / delta[i, j]))
+                # tidak dibulatkan karena looping (180 = 0)
 
                 # saturation
                 hsv_image[i, j, 1] = np.round((100 * (cmax[i, j] - cmin[i, j]) / cmax[i, j] ))
