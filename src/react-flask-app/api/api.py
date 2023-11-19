@@ -46,6 +46,22 @@ def get_image_objects_from_folder(folder_path):
 
     return image_objects
 
+# Rute untuk clean up
+@app.route('/api/cleanup', methods=['GET'])
+def clean_up():
+    global uploaded_dataset
+    uploaded_dataset = []
+    global uploaded_image
+    uploaded_image = ''
+    global dataset_path
+    dataset_path = ''
+    global directory_path
+    directory_path = ''
+    global search_mode
+    search_mode = 'color'
+
+    return jsonify({'message': 'Cleanup successfully'})
+
 # Rute untuk menampilan dataset ke layar
 @app.route('/api/images/<path:filename>')
 def get_image(filename):

@@ -15,9 +15,11 @@ function App() {
           <Route path="/how-to-use" element={<HowToUse />} />
           <Route path="/image-retrieval" element={<Home />} />
           <Route path="/concept" element={<Concept />} />
+          <Route path="*" element={<LandingPage />} />
         </Routes>
     </Router>
   );
 }
 
 export default App;
+

@@ -116,44 +116,46 @@ function Result() {
   };
 
   const handlePDF = () => {
-    if (images.length === 0) {
-      setAlert(true);
-      return;
+    if (images[0] !== null && imageQuery) {
+
+      setLoading(true); 
+
+      setTimeout(() => {
+        const pdf = new jsPDF();
+        const imagesPerPage = 12;
+
+        pdf.text('Image Query', 20, 20);
+        pdf.addImage(`http://localhost:5000/api/image/${imageQuery}`, 'JPEG', 20, 70, 80, 90);
+        pdf.addPage();
+
+        images.forEach((image, index) => {
+          const page = Math.floor(index / imagesPerPage);
+          const position = index % imagesPerPage;
+
+          // Start a new page for every 12 images
+          if (position === 0 && index !== 0) {
+            pdf.addPage();
+          }
+
+          const x = 10 + (position % 3) * 60;
+          const y = 10 + Math.floor(position / 3) * 70 + page ;
+
+          pdf.addImage(`http://localhost:5000/api/images/${image.image_url}`, 'JPEG', x, y, 50, 60);
+
+          if (image.similarity) {
+            pdf.text(`Similarity: ${image.similarity}%`, x, y + 67.5);
+          }
+        });
+
+        pdf.save('generated_pdf');
+        
+        setLoading(false); 
+      }, 2000); 
     }
-
-    setLoading(true); 
-
-    setTimeout(() => {
-      const pdf = new jsPDF();
-      const imagesPerPage = 12;
-
-      pdf.text('Image Query', 20, 20);
-      pdf.addImage(`http://localhost:5000/api/image/${imageQuery}`, 'JPEG', 20, 70, 80, 90);
-      pdf.addPage();
-
-      images.forEach((image, index) => {
-        const page = Math.floor(index / imagesPerPage);
-        const position = index % imagesPerPage;
-
-        // Start a new page for every 12 images
-        if (position === 0 && index !== 0) {
-          pdf.addPage();
-        }
-
-        const x = 10 + (position % 3) * 60;
-        const y = 10 + Math.floor(position / 3) * 70 + page ;
-
-        pdf.addImage(`http://localhost:5000/api/images/${image.image_url}`, 'JPEG', x, y, 50, 60);
-
-        if (image.similarity) {
-          pdf.text(`Similarity: ${image.similarity}%`, x, y + 67.5);
-        }
-      });
-
-      pdf.save('generated_pdf');
-      
-      setLoading(false); 
-    }, 2000); 
+    else{
+      setAlert(true);
+      return ;
+    }
   };
 
   // Menghitung batas bawah dan atas gambar yang akan ditampilkan berdasarkan halaman

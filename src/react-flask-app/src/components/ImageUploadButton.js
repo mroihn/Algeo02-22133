@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useRef,useCallback, useEffect } from 'react';
 import { Card, Button, Col, Row, Container } from 'react-bootstrap';
 import NoImage from '../img/no_image.jpg';
@@ -19,8 +20,30 @@ function ImageUploadButton() {
     sendDataToAPI(!isSearchMode ? 'color' : 'texture');
   };
 
+  const cleanUp = () => {
+    fetch('http://localhost:5000/api/cleanup', {
+      method: 'GET',
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Failed to cleanup');
+        }
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error during cleanup', error);
+      });
+  }
+
   useEffect(() => {
-    handleToggle();
+    return () => {
+      cleanUp();
+      handleToggle();
+    };
   }, []);
 
   const sendDataToAPI = (data) => {
