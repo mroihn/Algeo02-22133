@@ -87,7 +87,7 @@ def upload_dataset():
 
         return jsonify({'message': 'Dataset uploaded successfully', 'images': image_objects})
     else:
-        return jsonify({'message': 'Error selecting folder'})
+        return jsonify({'message': 'Error selecting folder'}), 400
 
 # Rute untuk mengupload gambar 
 @app.route('/api/upload', methods=['GET'])
@@ -108,7 +108,7 @@ def upload_image():
         image_object = {'image_url': file_path, 'image_name': file_name}
         return jsonify({'message': 'Image uploaded successfully', 'image': image_object})
     else:
-        return jsonify({'message': 'Error selecting image'})
+        return jsonify({'message': 'Error selecting image'}), 400
 
 # Rute untuk mengambil gambar dari kamera    
 @app.route('/api/camera', methods=['POST'])
@@ -240,7 +240,7 @@ def image_scraping():
         uploaded_dataset = image_objects
         return jsonify({'message': 'Image scraping successfully', 'images': image_objects})
     else:
-        return jsonify({'message': 'Error scraping image'})
+        return jsonify({'message': 'Error scraping image'}), 400
 
 
 if __name__ == '__main__':
