@@ -1,9 +1,9 @@
 # Tubes Algeo02-22133
 > We created this website to fulfill assignments in linear algebra and geometry.
-> Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
 
 ## Table of Contents
 * [General Info](#general-information)
+* [Structure](#structure)
 * [Technologies Used](#technologies-used)
 * [Features](#features)
 * [Screenshots](#screenshots)
@@ -19,6 +19,45 @@
 ## General Information
 - The system enables users to explore visual information stored across various platforms, whether in the form of personal image searches, medical image analysis for diagnosis, scientific illustration searches,   or commercial product searches based on images.
 
+## Structure
+``` bash
+.
+└── Algeo02-22133/
+    ├── doc
+    ├── img
+    ├── src/
+    │   └── react-flask-app/
+    │       ├── api/
+    │       │   ├── _pycache_
+    │       │   ├── venv
+    │       │   ├── .flaskenv
+    │       │   ├── api.py
+    │       │   ├── color.py
+    │       │   └── texture.py
+    │       ├── public
+    │       └── src/
+    │           ├── components/
+    │           │   ├── About.js
+    │           │   ├── AboutContainer.js
+    │           │   ├── Concept.js
+    │           │   ├── ConceptContainer.js
+    │           │   ├── HTUContainer.js
+    │           │   ├── Header.js
+    │           │   ├── Home.js
+    │           │   ├── HowToUse.js
+    │           │   ├── ImageUploadButton.js
+    │           │   ├── LPContainer.js
+    │           │   ├── LandingPage.js
+    │           │   ├── Navbar.js
+    │           │   ├── Result.js
+    │           │   └── loading.css
+    │           ├── img
+    │           ├── App.js
+    │           └── index.js
+    ├── test
+    ├── README.md
+    └── requirements.txt
+```
 
 ## Technologies Used
 - React - version 18.2.0
