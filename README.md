@@ -40,16 +40,16 @@ Click this link for other examples [click here](./img)
 
 
 ## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
-
-Proceed to describe how to install / setup one's local environment / get started with the project.
+Click on this link to access the requirements.txt file [click here](./requirements.txt).
+You also need to install Yarn and npm. We recommend using Python version 3.8.x to 3.10.x
 
 
 ## Usage
-How does one go about using it?
-Provide various use cases and code examples here.
-
-`git clone `
+1. `git clone https://github.com/mroihn/Algeo02-22133.git `
+2. `cd .\src\react-flask-app\ `
+3. `yarn start`
+4. `cd .\src\react-flask-app\api\`
+5. `python api.py`
 
 
 ## Project Status
@@ -57,15 +57,13 @@ Project is: _in progress_ / _complete_ / _no longer being worked on_. If you are
 
 
 ## Room for Improvement
-Include areas you believe need improvement / could be improved. Also add TODOs for future development.
-
 Room for improvement:
-- Improvement to be done 1
-- Improvement to be done 2
+- We have not yet implemented caching results of computations for a dataset to enhance efficiency and effectiveness when the dataset is used repeatedly.
+- We have not yet employed an object detector capable of processing and cropping input images, aiming to enhance the maximization of the provided results.
 
 To do:
-- Feature to be added 1
-- Feature to be added 2
+- Implement caching result
+- Implement object detector
 
 
 ## Acknowledgements
@@ -76,10 +74,11 @@ Give credit here.
 
 
 ## Contact
-Email (Yosef) : 13522133@std.stei.itb.ac.id
-Email (Roihan) : 13522152@std.stei.itb.ac.id
-Email (Rayhan) : 13522160@std.stei.itb.ac.id
-feel free to contact us!
+Feel free to contact us!
+- Email (Yosef) : 13522133@std.stei.itb.ac.id
+- Email (Roihan) : 13522152@std.stei.itb.ac.id
+- Email (Rayhan) : 13522160@std.stei.itb.ac.id
+
 
 
 <!-- Optional -->
