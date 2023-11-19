@@ -19,6 +19,10 @@ function ImageUploadButton() {
     sendDataToAPI(!isSearchMode ? 'color' : 'texture');
   };
 
+  useEffect(() => {
+    handleToggle();
+  }, []);
+
   const sendDataToAPI = (data) => {
     // Kirim data ke API flask untuk menentukan search mode
     fetch('http://localhost:5000/api/searchmode', {
