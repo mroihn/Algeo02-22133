@@ -1,5 +1,5 @@
 # Tubes Algeo02-22133
-> Outline a brief description of your project.
+> We created this website to fulfill assignments in linear algebra and geometry.
 > Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
 
 ## Table of Contents
@@ -17,11 +17,7 @@
 
 
 ## General Information
-- Provide general information about your project here.
-- What problem does it (intend to) solve?
-- What is the purpose of your project?
-- Why did you undertake it?
-<!-- You don't have to answer all the questions - just the ones relevant to your project. -->
+- The system enables users to explore visual information stored across various platforms, whether in the form of personal image searches, medical image analysis for diagnosis, scientific illustration searches,   or commercial product searches based on images.
 
 
 ## Technologies Used
@@ -31,14 +27,15 @@
 
 ## Features
 List the ready features here:
-- Awesome feature 1
-- Awesome feature 2
-- Awesome feature 3
+- Color Based Image Retrieval
+- Texture Based Image Retrieval
+- Image Scraping
+- Image retrieval using captured images from a webcam
+- Export the results in PDF format
 
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
+![Example screenshot](./img/color4738img.png)
 
 
 ## Setup
@@ -51,7 +48,7 @@ Proceed to describe how to install / setup one's local environment / get started
 How does one go about using it?
 Provide various use cases and code examples here.
 
-`write-your-code-here`
+`git clone `
 
 
 ## Project Status
@@ -78,7 +75,10 @@ Give credit here.
 
 
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
+Email (Yosef) : 13522133@std.stei.itb.ac.id
+Email (Roihan) : 13522152@std.stei.itb.ac.id
+Email (Rayhan) : 13522160@std.stei.itb.ac.id
+feel free to contact us!
 
 
 <!-- Optional -->
