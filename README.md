@@ -36,6 +36,7 @@ List the ready features here:
 
 ## Screenshots
 ![Example screenshot](./img/color4738img.png)
+Click this link for other examples [click here](./img)
 
 
 ## Setup
