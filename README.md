@@ -92,7 +92,7 @@ You also need to install Yarn and npm. We recommend using Python version 3.8.x t
 
 
 ## Project Status
-Project is: _in progress_ / _complete_ / _no longer being worked on_. If you are no longer working on it, provide reasons why.
+Project is:  _complete_ 
 
 
 ## Room for Improvement
@@ -106,10 +106,16 @@ To do:
 
 
 ## Acknowledgements
-Give credit here.
-- This project was inspired by...
-- This project was based on [this tutorial](https://www.example.com).
-- Many thanks to...
+This project was based on
+- “How to create a react flask project” by Miguel Grinberg https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project
+- “RGB to HSV color conversion” from rapidtables.com https://www.rapidtables.com/convert/color/rgb-to-hsv.html
+- “Content-based image retrieval using color and texture fused features” by Jun Yue et al. https://www.sciencedirect.com/science/article/pii/S0895717710005352
+- “Numba documentation” https://numba.readthedocs.io/en/stable/index.html
+- “Numpy documentation” https://numpy.org/doc/
+- “Feature Extraction : Gray Level Co-occurrence Matrix (GLCM)” https://yunusmuhammad007.medium.com/feature-extraction-gray-level-co-occurrence-matrix-glcm-10c45b6d46a1
+
+
+
 
 
 ## Contact
