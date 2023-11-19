@@ -10,7 +10,7 @@ function Header() {
       <div className="row">
         <div className="col-12 text-center">
           <div className="jumbotron" style={jumbotronStyle}>
-            <h1 className="display-4">Image Search App</h1>
+            <h1 className="display-4">Image Retrieval System</h1>
           </div>
         </div>
       </div>
